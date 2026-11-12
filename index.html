@@ -37,9 +37,12 @@ body{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-seri
 .toast{position:absolute;z-index:6;left:74px;right:14px;top:calc(env(safe-area-inset-top) + 176px);background:rgba(17,20,24,.92);color:#fff;border-radius:16px;padding:10px 14px;font-size:13px;line-height:1.5;display:none}
 /* sheet */
 .sheet{position:absolute;z-index:5;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom) + 10px);height:var(--sh);background:var(--glass);-webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);border:1px solid rgba(255,255,255,.85);border-radius:32px;box-shadow:0 12px 40px rgba(25,45,80,.22);display:flex;flex-direction:column;min-height:0;transition:height .25s}
-.sheet.exp{--sh:80dvh}
-.handle{border:0;background:none;padding:10px 0 4px;cursor:pointer;flex:none}
-.handle i{display:block;width:40px;height:5px;border-radius:3px;background:rgba(17,20,24,.18);margin:0 auto}
+.sheet.drag{transition:none}
+.grab{flex:none;padding:12px 18px 6px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.grab i{display:block;width:44px;height:5px;border-radius:3px;background:rgba(17,20,24,.22);margin:0 auto}
+#peek{display:none;margin-top:10px;font-weight:800;font-size:15px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sheet.s0 #peek{display:block}
+#sbody{transition:opacity .2s}.sheet.s0 #sbody{opacity:0;pointer-events:none}
 #sbody{overflow-y:auto;flex:1;padding:2px 18px calc(14px);-webkit-overflow-scrolling:touch}
 .rank{display:inline-block;font-size:12px;font-weight:800;background:var(--cream);border-radius:12px;padding:4px 11px}.rank.alt{background:rgba(17,20,24,.07);color:var(--mute)}
 .nm{font-size:24px;font-weight:800;line-height:1.2;margin:8px 0 2px;letter-spacing:-.02em}
@@ -100,7 +103,7 @@ h3{font-size:13px;margin:16px 0 8px;color:var(--mute);font-weight:700}
 @media(min-width:900px){
   .hd{right:auto;width:480px;padding-bottom:20px;background:none}
   .sheet{left:16px;right:auto;width:430px;top:240px;bottom:16px;height:auto}
-  .handle{display:none}.sheet.exp{--sh:auto}#sbody{padding-top:18px}
+  .grab{display:none}#sbody{padding-top:18px}
   .rail{left:462px;top:30px}.toast{left:520px;right:auto;width:360px;top:30px}
   .msheet{max-width:520px;margin:auto;border-radius:30px}.modal{align-items:center}
 }
@@ -121,8 +124,8 @@ h3{font-size:13px;margin:16px 0 8px;color:var(--mute);font-weight:700}
     <button id="fSet" aria-label="설정"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></button>
   </nav>
   <div class="toast" id="toast"></div>
-  <section class="sheet" id="sheet">
-    <button class="handle" id="handle" aria-label="패널 크기 조절"><i></i></button>
+  <section class="sheet s1" id="sheet">
+    <div class="grab" id="handle" role="button" aria-label="패널 올리고 내리기"><i></i><div id="peek"></div></div>
     <div id="sbody">
       <div id="best"></div>
       <h3 id="lh">다른 후보</h3>
@@ -191,10 +194,10 @@ function render(fit=true){
   const where=pending?'현위치 확인 중…':me.name+(me.gps&&me.acc?` (±${Math.round(me.acc)}m)`:'');
   $('ctx').innerHTML=`<b>${DAYN[day]}${day<7?'요일':''} ${fmt(tmin)}</b>${useNow?'':' (설정)'} · ${where}`;
   $('nAvail').textContent=LIST.length;
-  if(!LIST.length){$('nFast').textContent='–';$('best').innerHTML='<div class="none">이 시각에 이용 가능한 AED를 찾지 못했습니다.<br>지체하지 말고 119에 신고하고 안내를 따르세요.</div>';$('list').innerHTML='';$('bx').innerHTML='';$('lh').style.display='none';drawMap(fit);return}
+  if(!LIST.length){$('nFast').textContent='–';$('peek').textContent='이용 가능한 AED 없음 · 119에 신고';$('best').innerHTML='<div class="none">이 시각에 이용 가능한 AED를 찾지 못했습니다.<br>지체하지 말고 119에 신고하고 안내를 따르세요.</div>';$('list').innerHTML='';$('bx').innerHTML='';$('lh').style.display='none';drawMap(fit);return}
   $('lh').style.display='';
   if(sel>=Math.min(LIST.length,6))sel=0;
-  $('nFast').textContent=min(LIST[0].walk);
+  $('nFast').textContent=min(LIST[0].walk);$('peek').textContent=LIST[sel].a.n+' · 도보 '+min(LIST[sel].walk)+'분';
   card();
   $('lh').textContent=`예상 소요 순 후보 (위 ${Math.min(6,LIST.length)}곳)`;
   $('list').innerHTML=LIST.slice(0,6).map((r,i)=>`<div class="cc ${r.s} ${i===sel?'sel':''}" data-i="${i}"><span class="n">${i+1}</span><b>${min(r.walk)}분</b><span class="nn">${r.a.n}</span><span class="dd">${dtxt(r.m)}</span></div>`).join('');
@@ -288,8 +291,18 @@ $('fSet').onclick=()=>$('modal').classList.add('open');
 $('ctx').onclick=()=>$('modal').classList.add('open');
 $('mclose').onclick=()=>$('modal').classList.remove('open');
 $('modal').onclick=e=>{if(e.target.id==='modal')$('modal').classList.remove('open')};
-$('handle').onclick=()=>{$('sheet').classList.toggle('exp');setTimeout(()=>{if(ready){map.relayout();drawMap(true)}},300)};
-window.addEventListener('resize',()=>{if(ready){map.relayout();drawMap(true)}});
+const SNAP=()=>{const v=innerHeight;return[78,Math.min(Math.max(300,v*.46),420),v*.8]};
+let sIdx=1;
+function setSheet(i){sIdx=i;const sh=$('sheet');sh.classList.remove('s0','s1','s2','drag');sh.classList.add('s'+i);sh.style.setProperty('--sh',SNAP()[i]+'px');setTimeout(()=>{if(ready){map.relayout();drawMap(true)}},300)}
+(function(){const h=$('handle'),sh=$('sheet');let y0=null,h0=0,moved=0;
+  h.onpointerdown=e=>{if(innerWidth>=900)return;y0=e.clientY;h0=sh.offsetHeight;moved=0;h.setPointerCapture(e.pointerId);sh.classList.add('drag')};
+  h.onpointermove=e=>{if(y0==null)return;const dy=y0-e.clientY;moved=Math.max(moved,Math.abs(dy));const S=SNAP();sh.style.setProperty('--sh',Math.max(S[0],Math.min(S[2],h0+dy))+'px')};
+  h.onpointerup=e=>{if(y0==null)return;const dy=y0-e.clientY;y0=null;sh.classList.remove('drag');
+    if(moved<6){setSheet(sIdx===0?1:0);return}
+    const S=SNAP(),cur=h0+dy;let best=0;S.forEach((v,i)=>{if(Math.abs(v-cur)<Math.abs(S[best]-cur))best=i});setSheet(best)};
+  h.onpointercancel=()=>{y0=null;setSheet(sIdx)};
+})();
+window.addEventListener('resize',()=>{$('sheet').style.setProperty('--sh',SNAP()[sIdx]+'px');if(ready){map.relayout();drawMap(true)}});
 Object.entries(PLACES).forEach(([n,[la,lo]])=>{const b=document.createElement('button');b.className='chip';b.textContent=n;b.onclick=()=>{me={lat:la,lng:lo,name:n,gps:false,acc:null};pending=false;sel=0;render();$('modal').classList.remove('open')};$('locs').appendChild(b)});
 PRESETS.forEach(([n,d,t])=>{const b=document.createElement('button');b.className='chip';b.textContent=n;b.onclick=()=>{useNow=false;day=d;tmin=+t.slice(0,2)*60+ +t.slice(3);$('time').value=t;sel=0;render();$('modal').classList.remove('open')};$('pres').appendChild(b)});
 DAYN.forEach((n,i)=>{const b=document.createElement('button');b.className='chip';b.textContent=n;b.onclick=()=>{useNow=false;day=i;sel=0;render()};$('days').appendChild(b)});
