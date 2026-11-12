@@ -51,6 +51,8 @@ body{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-seri
 .tile{background:#fff;border-radius:20px;padding:10px 13px;box-shadow:0 1px 3px rgba(20,40,80,.06)}
 .tile span{display:block;font-size:11.5px;color:var(--mute)}
 .tile b{font-size:20px;font-weight:700;letter-spacing:-.02em}.tile b small{font-size:12px;font-weight:600;margin-left:1px}
+.rt{font-size:12.5px;color:var(--mute);margin:-4px 0 10px 4px;min-height:0}.rt:empty{display:none}.rt b{color:var(--ink)}
+.appl{display:block;text-align:center;font-size:13px;color:var(--mute);text-decoration:none;padding:12px 0 2px}
 .slide{position:relative;height:62px;border-radius:31px;background:rgba(17,20,24,.07);display:flex;align-items:center;justify-content:center;overflow:hidden;user-select:none;-webkit-user-select:none;--p:0}
 .slide span{font-size:15px;font-weight:700;color:#3b4350;padding-left:44px;opacity:calc(1 - var(--p)*1.4)}
 .slide span::after{content:" ›››";letter-spacing:2px;color:#9aa4b2}
@@ -216,7 +218,9 @@ function bindSlide(url){
 }
 function card(){
   const r=LIST[sel],a=r.a;
-  const url='https://map.kakao.com/link/by/walk/'+encodeURIComponent(a.n)+','+a.la+','+a.lo;
+  const sn=encodeURIComponent(me.gps?'내 위치':(me.name.replace(/\(.*?\)/g,'').trim()||'출발지'));
+  const url=`https://map.kakao.com/link/by/walk/${sn},${me.lat},${me.lng}/${encodeURIComponent(a.n)},${a.la},${a.lo}`;
+  const appUrl=`https://m.map.kakao.com/scheme/route?sp=${me.lat},${me.lng}&ep=${a.la},${a.lo}&by=foot`;
   let red='',extra='';
   if(r.m>1500)red=`<div class="note red">가장 가까운 후보도 ${dtxt(r.m)} 떨어져 있습니다. 119에 먼저 신고하고 안내를 따르세요.</div>`;
   if(sel===0){
@@ -227,13 +231,13 @@ function card(){
   $('best').innerHTML=`<span class="rank ${sel?'alt':''}">${sel===0?'지금 가장 빠르게 쓸 수 있는 AED':'대안 '+(sel+1)+'순위'}</span>
   <div class="nm">${a.n}</div><div class="pl">${a.p||'(설치위치 미기재)'}</div>
   <div class="tiles"><div class="tile"><span>도보</span><b>${min(r.walk)}<small>분</small></b></div><div class="tile"><span>거리</span><b>${dtxt(r.m)}</b></div><div class="tile"><span>왕복 예상</span><b>${min(r.E)}<small>분</small></b></div></div>
-  ${red}<div class="slide ${r.s}" id="slide"><button class="knob" id="knob" aria-label="카카오맵 도보 길안내 열기">${ARROW}</button><span>밀어서 길안내 시작</span></div>`;
+  <div class="rt" id="rt"></div>${red}<div class="slide ${r.s}" id="slide"><button class="knob" id="knob" aria-label="카카오맵 도보 길안내 열기">${ARROW}</button><span>밀어서 길안내 시작</span></div><a class="appl" href="${appUrl}" target="_blank" rel="noopener">카카오맵 앱으로 바로 열기 ›</a>`;
   $('bx').innerHTML=`<div class="badges"><span class="bd ${r.s}">${r.s==='ok'?'등록 이용시간 내 · 이용 가능':warnReason(r)}</span><span class="bd">${GNAME[a.g]}</span><span class="bd">${a.t}</span></div><div class="ad">${a.a}</div>${extra}`;
   bindSlide(url);
 }
 
 // ---- map
-let map,ready=false,ov=[],line=null;
+let map,ready=false,ov=[],line=null,rline=null;const ROUTE={};
 function noMap(msg){$('map').innerHTML='<div class="nomap">'+msg+'</div>'}
 function loadSDK(){
   const s=document.createElement('script');s.src='https://dapi.kakao.com/v2/maps/sdk.js?appkey='+KAKAO_KEY+'&autoload=false';
@@ -249,9 +253,24 @@ function init(){
 }
 function pin(cls,html,lat,lng,z,onclick,title){const el=document.createElement('div');el.className=cls;if(html)el.innerHTML=html;if(title)el.title=title;if(onclick)el.onclick=onclick;
   const o=new kakao.maps.CustomOverlay({position:new kakao.maps.LatLng(lat,lng),content:el,xAnchor:.5,yAnchor:.5,zIndex:z});o.setMap(map);ov.push(o);return o}
+function showRoute(t,R){
+  if(!ready||LIST[sel]!==t)return;
+  if(rline){rline.setMap(null);rline=null}
+  if(R.coords.length>1){rline=new kakao.maps.Polyline({path:R.coords.map(c=>new kakao.maps.LatLng(c[1],c[0])),strokeWeight:6,strokeColor:'#111418',strokeOpacity:.9,strokeStyle:'solid'});rline.setMap(map);if(line){line.setMap(null);line=null}}
+  const el=$('rt');if(el)el.innerHTML=`실제 도보 경로 <b>${dtxt(R.dist)}</b> · 약 <b>${min(R.dist/80)}분</b>`;
+}
+function loadRoute(t){
+  const key=[me.lat.toFixed(5),me.lng.toFixed(5),t.a.la,t.a.lo].join(',');
+  if(ROUTE[key]){if(ROUTE[key]!=='x')showRoute(t,ROUTE[key]);return}
+  ROUTE[key]='x';
+  const ac=new AbortController(),to=setTimeout(()=>ac.abort(),7000);
+  fetch(`https://routing.openstreetmap.de/routed-foot/route/v1/foot/${me.lng},${me.lat};${t.a.lo},${t.a.la}?overview=full&geometries=geojson`,{signal:ac.signal})
+    .then(r=>r.json()).then(j=>{clearTimeout(to);const rt=j.routes&&j.routes[0];if(!rt)return;const R={coords:rt.geometry.coordinates,dist:rt.distance};ROUTE[key]=R;showRoute(t,R)})
+    .catch(()=>{clearTimeout(to);delete ROUTE[key]});
+}
 function drawMap(fit){
   if(!ready)return;
-  ov.forEach(o=>o.setMap(null));ov=[];if(line){line.setMap(null);line=null}
+  ov.forEach(o=>o.setMap(null));ov=[];if(line){line.setMap(null);line=null}if(rline){rline.setMap(null);rline=null}
   pin('me','',me.lat,me.lng,10);
   if(!LIST.length){if(fit)map.setCenter(new kakao.maps.LatLng(me.lat,me.lng));return}
   if($('showAll').checked)LIST.slice(6).forEach(r=>pin('pin dot '+r.s,'',r.a.la,r.a.lo,1,null,r.a.n));
@@ -259,7 +278,7 @@ function drawMap(fit){
   const t=LIST[sel];
   pin('lbl',`<i>${sel+1}</i><span><b>도보 ${min(t.walk)}분</b><em>${t.a.n}</em></span>`,t.a.la+0.0009,t.a.lo,11,null);
   line=new kakao.maps.Polyline({path:[new kakao.maps.LatLng(me.lat,me.lng),new kakao.maps.LatLng(t.a.la,t.a.lo)],strokeWeight:4,strokeColor:'#111418',strokeOpacity:.75,strokeStyle:'shortdash'});
-  line.setMap(map);
+  line.setMap(map);loadRoute(t);
   if(fit){const b=new kakao.maps.LatLngBounds();b.extend(new kakao.maps.LatLng(me.lat,me.lng));b.extend(new kakao.maps.LatLng(t.a.la,t.a.lo));
     const dsk=innerWidth>=900,sb=$('sheet').offsetHeight;
     map.setBounds(b,dsk?110:230,60,dsk?60:sb+60,dsk?500:60)}
