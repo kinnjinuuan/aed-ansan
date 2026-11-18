@@ -8,9 +8,13 @@
     python scripts/classify_aed.py 입력.xlsx data/aed_안산시_분류.csv
 
 분류 결과(접근성 등급)
-    A 완전 개방  : 지하철역, 24시 편의점, 대형마트, 병원 응급실, 경찰, 소방
-    B 일반 개방  : 관공서·주민센터, 공공·문화·체육·복지시설, 병원, 금융기관, 교통·상업
-    C 후순위     : 아파트·공동주택, 학교
+    A 야간 상주·운영 : 밤에도 사람이 있거나 운영되는 곳
+                       지하철역(운행 시간 내), 편의점, 병원 응급실, 경찰·소방,
+                       그리고 설치위치에 경비실·초소·관제·당직실·병동·간호사실이 있는 경우
+                       (시설 유형과 무관하게 A로 올림 — 아파트·기업·병원·관공서 포함)
+    B 업무·영업시간  : 관공서·주민센터, 공공·문화·체육·복지시설, 병원(응급실·병동 외),
+                       금융기관, 교통·상업, 대형마트 (야간엔 닫힐 수 있어 등록 이용시간 확인)
+    C 후순위         : 아파트·공동주택, 학교 (경비실·초소 등 상주 위치는 A)
     D 기업·공장  : 일반인 접근 제한 가능성 높음 → 앱 기본 노출에서 제외
     U 분류 불명  : 키워드로 판단 불가
     X 이동형     : 구급차 등 → 앱에서 제외
@@ -53,6 +57,18 @@ def covers(st, en, a, b):
     return st <= a and en >= b
 
 
+# 야간에도 사람이 상주하는 위치 키워드 (숙직실은 무인 경비 학교가 많아 제외)
+STAY = r"경비실|초소|관제|상황실|당직|병동|간호사"
+
+
+def apply_stay(typ, g, sub, txt):
+    """설치위치에 24시간 상주 키워드가 있으면 A(야간 상주·운영)로 올린다. (g, sub, 근거) 반환."""
+    m = re.search(STAY, txt)
+    if m and g in ("B", "C", "D", "U") and typ != "이동형(구급차)":
+        return "A", "야간 상주", "상주키워드:" + m.group(0)
+    return g, sub, ""
+
+
 def classify_row(r):
     org, place, addr = s(r.org), s(r.buildPlace), s(r.buildAddress)
     txt = org + " " + place
@@ -71,7 +87,7 @@ def classify_row(r):
     elif has(r"편의점|GS25|CU|세븐일레븐|이마트24|미니스톱"):
         typ, g, sub = "편의점", "A", "편의점"
     elif has(r"홈플러스|이마트|롯데마트|코스트코|하나로마트|트레이더스|대형마트"):
-        typ, g, sub = "대형마트", "A", "대형마트"
+        typ, g, sub = "대형마트", "B", "대형마트"  # 영업시간 한정(심야 폐점) → B
     elif has(r"응급실|응급의료"):
         typ, g, sub = "병원 응급실", "A", "응급실"
     elif has(r"경찰서|지구대|파출소|치안센터"):
@@ -123,6 +139,10 @@ def classify_row(r):
     if re.search(MANUAL_CORP, org):
         typ, g, sub = "기업·공장", "D", "기업"
         ev.append("수동보정(기업 시설)")
+
+    g, sub, stay_ev = apply_stay(typ, g, sub, txt)
+    if stay_ev:
+        ev.append(stay_ev)
 
     expo = {"X": "제외(이동형)", "D": "기본 제외(일반인 접근 제한 가능성 높음)"}.get(g, "기본 노출")
 
