@@ -69,6 +69,36 @@ def apply_stay(typ, g, sub, txt):
     return g, sub, ""
 
 
+# ---- 접근 태그·층 (앱에서 안내 문구와 이용확률 보정에 사용; 모두 텍스트 기반 추정)
+GATE = r"정문|후문|입구|문앞|문 앞"
+
+
+def access_tag(typ, txt):
+    """gg 정문 경비실 / g 경비실·초소·관제 / du 당직실 / wd 병동·간호사실 / bl 야간에 잠길 수 있는 건물 안 / '' 없음"""
+    if typ == "이동형(구급차)":
+        return ""
+    if re.search(r"경비실|초소|관제|상황실", txt):
+        return "gg" if re.search(GATE, txt) else "g"
+    if re.search(r"당직", txt):
+        return "du"
+    if re.search(r"병동|간호사", txt):
+        return "wd"
+    if typ in ("학교", "관공서·주민센터", "공공·문화체육복지"):
+        return "bl"
+    if typ == "아파트·공동주택" and re.search(r"관리사무소|관리동|관리소|경로당|커뮤니티|주민공동", txt):
+        return "bl"
+    return ""
+
+
+def floor_of(txt):
+    """설치위치의 층: 지하 n층 → -n, n층/nF → n, 없으면 0"""
+    m = re.search(r"지하(?!철)\s*(\d*)\s*층?|\bB(\d)\s*(?:층|F\b)", txt)
+    if m:
+        return -int(m.group(1) or m.group(2) or 1)
+    m = re.search(r"(\d{1,2})\s*(?:층|F\b)", txt)
+    return int(m.group(1)) if m else 0
+
+
 def classify_row(r):
     org, place, addr = s(r.org), s(r.buildPlace), s(r.buildAddress)
     txt = org + " " + place
@@ -164,6 +194,7 @@ def classify_row(r):
         평일24시간등록="Y" if wd24 else ("미등록" if wdnone else "N"),
         평일23시등록가능={True: "Y", False: "N", None: "미등록"}[wed23],
         공단권역추정="Y" if gd else "",
+        접근태그=access_tag(typ, txt), 층=floor_of(place),
         근거키워드=html.unescape(";".join(dict.fromkeys(ev))),
     )
 
