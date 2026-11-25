@@ -102,6 +102,51 @@ h3{font-size:13px;margin:16px 0 8px;color:var(--mute);font-weight:700}
 .msheet label.ck{display:flex;gap:8px;align-items:center;min-height:40px}
 .msheet input[type=time]{font:inherit;font-size:16px;padding:6px 10px;border:1px solid var(--line);border-radius:12px}
 .close{margin-top:16px;width:100%;min-height:52px;border:0;border-radius:26px;background:var(--ink);color:#fff;font:inherit;font-weight:800;font-size:16px}
+/* ===== 현장 제보 게시판 ===== */
+.toast{z-index:40}
+#board{position:fixed;inset:0;z-index:15;background:#f3f6fa;display:none;flex-direction:column}
+#board.open{display:flex}
+.bo-top{flex:none;padding:calc(env(safe-area-inset-top) + 14px) 18px 10px;background:#fff;border-bottom:1px solid var(--line)}
+.bo-row{display:flex;align-items:center;gap:10px}
+.bo-back{border:0;background:var(--ink);color:#fff;border-radius:22px;min-height:40px;padding:0 16px;font:inherit;font-weight:800;font-size:14px;cursor:pointer}
+.bo-ttl{font-size:20px;font-weight:800;letter-spacing:-.02em;flex:1}
+.bo-sub{font-size:12.5px;color:var(--mute);margin:8px 0 0;line-height:1.5}
+.bo-search{width:100%;margin-top:10px;font:inherit;font-size:15px;padding:11px 14px;border:1px solid var(--line);border-radius:16px;background:#f7f9fc}
+.bo-fl{display:flex;gap:6px;overflow-x:auto;margin-top:10px;scrollbar-width:none}.bo-fl::-webkit-scrollbar{display:none}
+.bo-fl .chip{flex:none;min-height:34px;font-size:13px;padding:0 13px}
+.bo-body{flex:1;overflow-y:auto;padding:12px 16px calc(env(safe-area-inset-bottom) + 24px);-webkit-overflow-scrolling:touch}
+.bo-wrap{max-width:720px;margin:0 auto}
+.bo-it{background:#fff;border-radius:20px;padding:13px 15px;margin-bottom:9px;box-shadow:0 1px 3px rgba(20,40,80,.06);cursor:pointer}
+.bo-it b{font-size:16px;letter-spacing:-.01em}.bo-it .s{font-size:12.5px;color:var(--mute);margin-top:2px;line-height:1.5}
+.bo-bds{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.bo-b{font-size:12px;padding:3px 9px;border-radius:12px;background:rgba(17,20,24,.06);font-weight:600}
+.bo-b.gap{background:#fde4e1;color:#b42318}.bo-b.okc{background:#dcf3e8;color:#0b6b47}.bo-b.few{background:#fcebcb;color:#80500a}
+.bo-card{background:#fff;border-radius:22px;padding:15px 16px;margin-bottom:11px;box-shadow:0 1px 3px rgba(20,40,80,.06)}
+.bo-card h4{margin:0 0 8px;font-size:13px;color:var(--mute);font-weight:700}
+.bo-h{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:2px 0}
+.bo-reg div{display:flex;gap:10px;font-size:14px;line-height:1.7}.bo-reg span:first-child{width:62px;color:var(--mute);flex:none}
+.bo-bar{height:12px;border-radius:6px;background:#eee;overflow:hidden;display:flex;margin:6px 0 4px}
+.bo-bar i{display:block;height:100%}.bo-bar .u{background:#1b9e6b}.bo-bar .x{background:#e5372b}
+.bo-ln{font-size:13.5px;line-height:1.55;margin:10px 0 2px}
+.bo-v{border-radius:16px;padding:11px 13px;font-size:14px;line-height:1.55;font-weight:700;margin-top:6px}
+.bo-v.gap{background:#fff0ee;color:#b42318}.bo-v.okc{background:#e6f6ee;color:#0b6b47}.bo-v.few{background:#f1f4f8;color:var(--mute);font-weight:600}
+.bo-rp{border-top:1px solid var(--line);padding:12px 0}.bo-rp:first-of-type{border-top:0}
+.bo-rh{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--mute)}
+.bo-role{font-weight:800;padding:2px 9px;border-radius:11px;background:#eef1f5;color:var(--ink)}.bo-role.ad{background:#dbe7ff;color:#1d4ed8}.bo-role.demo{background:#eee;color:#888}
+.bo-res{font-weight:800;font-size:14.5px;margin:6px 0 2px}
+.bo-res.u{color:#0b6b47}.bo-res.x{color:#b42318}.bo-res.n{color:#80500a}
+.bo-tx{font-size:14.5px;line-height:1.6;margin:4px 0;white-space:pre-wrap;word-break:break-word}
+.bo-hp{border:1px solid var(--line);background:#fff;border-radius:16px;font:inherit;font-size:12.5px;padding:5px 11px;cursor:pointer;color:var(--mute)}.bo-hp.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.bo-fab{width:100%;min-height:54px;border:0;border-radius:27px;background:var(--ink);color:#fff;font:inherit;font-weight:800;font-size:16px;margin:4px 0 12px;cursor:pointer}
+.bo-in{width:100%;font:inherit;font-size:15px;padding:11px 13px;border:1px solid var(--line);border-radius:14px;background:#f7f9fc}
+textarea.bo-in{min-height:84px;resize:vertical}
+.bo-mg{display:flex;flex-wrap:wrap;gap:8px}
+.bo-mg .chip{min-height:38px;font-size:13.5px}
+.bo-warn{font-size:12px;color:var(--mute);line-height:1.6;margin-top:8px}
+#boForm{z-index:25}
+.railb{position:relative}
+@media(min-width:900px){.bo-top,.bo-body{padding-left:max(18px,calc(50% - 360px));padding-right:max(18px,calc(50% - 360px))}}
+
 /* desktop */
 @media(min-width:900px){
   .hd{right:auto;width:480px;padding-bottom:20px;background:none}
@@ -124,6 +169,7 @@ h3{font-size:13px;margin:16px 0 8px;color:var(--mute);font-weight:700}
   <nav class="rail">
     <button id="fGps" aria-label="내 위치"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></button>
     <button id="fPick" aria-label="위치 지정"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.800 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></button>
+    <button id="fBoard" aria-label="현장 제보 게시판"><svg viewBox="0 0 24 24"><path d="M5 4h14v12H9l-4 4z"/><path d="M9 9h6M9 12h4"/></svg></button>
     <button id="fSet" aria-label="설정"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg></button>
   </nav>
   <div class="toast" id="toast"></div>
@@ -144,6 +190,8 @@ h3{font-size:13px;margin:16px 0 8px;color:var(--mute);font-weight:700}
   </section>
 </div>
 
+<div id="board"><div class="bo-top"><div class="bo-row"><button class="bo-back" id="boBack">← 응급 화면</button><div class="bo-ttl" id="boTtl">AED 현장 제보 게시판</div></div><div id="boHdr"></div></div><div class="bo-body"><div class="bo-wrap" id="boMain"></div></div></div>
+<div class="modal" id="boForm"><div class="msheet" id="boFormBody"></div></div>
 <div class="modal" id="modal"><div class="msheet">
   <h2>위치·시각 설정 (시연용)</h2>
   <div class="small">평소에는 현재 시각과 현위치를 자동으로 씁니다. 시연할 때만 바꾸세요.</div>
@@ -188,13 +236,15 @@ const dtxt=m=>m<1000?Math.round(m)+'m':(m/1000).toFixed(1)+'km';
 const min=x=>Math.max(1,Math.round(x));
 
 let TOTAL=0;
-function compute(){const showD=$('showD').checked,out=[];
-  DATA.forEach(a=>{if(a.g==='X'||(a.g==='D'&&!showD))return;const s=state(a,day,tmin);if(s==='closed')return;
+function compute(){const showD=$('showD').checked,out=[],per=isNight(tmin)?'n':'d';
+  DATA.forEach(a=>{if(a.g==='X'||(a.g==='D'&&!showD))return;let s=state(a,day,tmin);
+    const cm=stat(keyOf(a),per),rate=cm.n>=2?cm.u/cm.n:null;
+    if(s==='closed'){if(rate!=null&&rate>=.8)s='warn';else return}
     const T=TAG[a.k],tg=T&&(!T.night||isNight(tmin))?T:null;
-    const m=dist(me.lat,me.lng,a.la,a.lo),walk=m*1.3/80+.4*lv(a.f),p=(s==='ok'?.92:.5)*(tg?tg.f:1);
-    out.push({a,s,m,walk,tg,cnt:1,E:2*walk+DELAY[a.g]+(tg?tg.d:0)+(1-p)*6})});
+    const m=dist(me.lat,me.lng,a.la,a.lo),walk=m*1.3/80+.4*lv(a.f);let p=(s==='ok'?.92:.5)*(tg?tg.f:1);
+    if(rate!=null){if(rate<=.34)p*=.5;else if(rate>=.8)p=Math.max(p,.9)}
+    out.push({a,s,m,walk,tg,cm:rate!=null?cm:null,cnt:1,E:2*walk+DELAY[a.g]+(tg?tg.d:0)+(1-p)*6})});
   out.sort((x,y)=>x.E-y.E);TOTAL=out.length;
-  // 같은 기관·60m 이내는 가장 빠른 1곳만 후보로 두고 대수만 표시
   const keep=[];out.forEach(r=>{const g=keep.find(k=>k.a.n===r.a.n&&dist(k.a.la,k.a.lo,r.a.la,r.a.lo)<60);if(g)g.cnt++;else keep.push(r)});
   return keep}
 function warnReason(r){const a=r.a;return a.l&&day>=1&&day<=5&&tmin>=720&&tmin<780?'점심시간(12~13시) — 출입 확인 필요':'이용시간 미등록·불명확 — 출입 확인 필요'}
@@ -220,6 +270,7 @@ function render(fit=true){
 function shortLab(r){const x=[];if(r.a.k&&TAG[r.a.k]&&(!TAG[r.a.k].night||isNight(tmin)))x.push(TAG[r.a.k].lab);const f=flab(r.a.f);if(f)x.push(f);if(r.cnt>1)x.push(r.cnt+'대');return x.length?' · '+x.join(' · '):''}
 function chips(r){const h=[];const T=r.tg;if(T)h.push(`<span class="ch ${T.night||T===TAG.wd?'cw':''}">${T.lab} · ${T.msg}</span>`);
   const f=flab(r.a.f);if(f)h.push(`<span class="ch">${f} · 계단·엘리베이터 이동 포함</span>`);
+  if(r.cm){const bad=r.cm.u/r.cm.n<=.34;h.push(`<span class="ch ${bad?'cw':''}">현장 제보 ${r.cm.n}건 중 ${r.cm.u}건 사용 가능${bad?' · 잠겨 있을 수 있어요':''}</span>`)}
   if(r.cnt>1)h.push(`<span class="ch">같은 건물 AED ${r.cnt}대</span>`);
   return h.length?`<div class="chips">${h.join('')}</div>`:''}
 function openNav(url){window.open(url,'_blank','noopener')}
@@ -247,9 +298,10 @@ function card(){
   $('best').innerHTML=`<span class="rank ${sel?'alt':''}">${sel===0?'지금 가장 빠르게 쓸 수 있는 AED':'대안 '+(sel+1)+'순위'}</span>
   <div class="nm">${a.n}</div><div class="pl">${a.p||'(설치위치 미기재)'}</div>${chips(r)}
   <div class="tiles"><div class="tile"><span>도보</span><b>${min(r.walk)}<small>분</small></b></div><div class="tile"><span>거리</span><b>${dtxt(r.m)}</b></div><div class="tile"><span>왕복 예상</span><b>${min(r.E)}<small>분</small></b></div></div>
-  <div class="rt" id="rt"></div>${red}<div class="slide ${r.s}" id="slide"><button class="knob" id="knob" aria-label="카카오맵 도보 길안내 열기">${ARROW}</button><span>밀어서 길안내 시작</span></div><a class="appl" href="${appUrl}" target="_blank" rel="noopener">카카오맵 앱으로 바로 열기 ›</a>`;
+  <div class="rt" id="rt"></div>${red}<div class="slide ${r.s}" id="slide"><button class="knob" id="knob" aria-label="카카오맵 도보 길안내 열기">${ARROW}</button><span>밀어서 길안내 시작</span></div><a class="appl" href="${appUrl}" target="_blank" rel="noopener">카카오맵 앱으로 바로 열기 ›</a><a class="appl" href="#" id="boLink">이 AED 다녀오셨나요? 현장 제보 남기기 ›</a>`;
   $('bx').innerHTML=`<div class="badges"><span class="bd ${r.s}">${r.s==='ok'?'등록 이용시간 내 · 이용 가능':warnReason(r)}</span><span class="bd">${GNAME[a.g]}</span><span class="bd">${a.t}</span></div><div class="ad">${a.a}</div>${extra}`;
   bindSlide(url);
+  $('boLink').onclick=e=>{e.preventDefault();openBoard(a)};
 }
 
 // ---- map
@@ -345,6 +397,122 @@ $('time').onchange=()=>{const v=$('time').value;if(!v)return;useNow=false;tmin=+
 $('now').onclick=()=>{useNow=true;sel=0;render();$('modal').classList.remove('open')};
 $('showD').onchange=()=>{sel=0;render()};$('showAll').onchange=()=>drawMap(false);
 setInterval(()=>{if(useNow){const n=nowKST();if(n.t!==tmin||n.d!==day)render(false)}},30000);
+// ===== 현장 제보 게시판 =====
+const LSK='aed_board_v1';
+const RES={ok:{t:'등록대로 사용 가능했어요',c:'u',use:1},ok24:{t:'등록 시간 밖인데도 사용 가능했어요',c:'u',use:1},locked:{t:'잠겨 있거나 들어갈 수 없었어요',c:'x',use:0},noaed:{t:'AED가 없었어요(철거·이전)',c:'x',use:0},broken:{t:'장비 문제(배터리·패드·고장)',c:'x',use:0},moved:{t:'위치가 달라서 찾기 어려웠어요',c:'n',use:null}};
+const ACC={open:'누구나 바로 가져갈 수 있음',guard:'경비실·관리실에 요청해야 함',card:'출입카드·비밀번호 필요',bell:'인터폰·벨 눌러야 함',floor:'층·세부 위치가 등록과 다름'};
+const keyOf=a=>a.n+'|'+a.la+'|'+a.lo;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let REP=[],VOTE={};
+function loadRep(){try{const o=JSON.parse(localStorage.getItem(LSK)||'{}');REP=o.r||[];VOTE=o.v||{}}catch(e){REP=[];VOTE={}}}
+function saveRep(){try{localStorage.setItem(LSK,JSON.stringify({r:REP,v:VOTE}))}catch(e){toast('이 브라우저에서는 저장이 막혀 있어요.')}}
+loadRep();
+const RECENT=180*864e5;
+function reps(k){return REP.filter(r=>r.k===k)}
+function stat(k,per){let u=0,x=0;const now=Date.now();REP.forEach(r=>{if(r.k!==k||r.per!==per||now-r.ts>RECENT||r.demo)return;const m=RES[r.res];if(m&&m.use===1)u++;else if(m&&m.use===0)x++});return{u,x,n:u+x}}
+function statAll(k,per){let u=0,x=0;REP.forEach(r=>{if(r.k!==k||r.per!==per)return;const m=RES[r.res];if(m&&m.use===1)u++;else if(m&&m.use===0)x++});return{u,x,n:u+x}}
+function hm(v){return String(Math.floor(v/100)).padStart(2,'0')+':'+String(v%100).padStart(2,'0')}
+function hrs(st,en){if(st==null||en==null||st===en)return'미등록';if(st===0&&en===2400)return'24시간';return hm(st)+'–'+(en>=2400?'익일 '+hm(en-2400):hm(en))}
+function hoursText(a){const order=[1,2,3,4,5,6,0],nm=['일','월','화','수','목','금','토'];const g=[];order.forEach(d=>{const s=hrs(a.h[2*d],a.h[2*d+1]);const l=g[g.length-1];if(l&&l.s===s)l.d.push(d);else g.push({s,d:[d]})});
+  return g.map(x=>({d:x.d.length>1?nm[x.d[0]]+'–'+nm[x.d[x.d.length-1]]:nm[x.d[0]],s:x.s}))}
+// 등록 데이터 기준 가용성(대표 시각: 수 23시 / 수 14시)과 제보 비교
+function gapOf(a,per){const k=keyOf(a),s=statAll(k,per),reg=state(a,3,per==='n'?1380:840);const r={s,reg};
+  if(s.n<2){r.v='few';return r}
+  const rate=s.u/s.n;
+  if(reg!=='closed'&&rate<=.4){r.v='gap';r.t=per==='n'?'등록상 밤에 이용 가능하지만, 실제로는 접근이 어렵다는 제보가 많아요':'등록상 낮에 이용 가능하지만, 실제로는 접근이 어렵다는 제보가 많아요'}
+  else if(reg==='closed'&&rate>=.6){r.v='gap';r.t=per==='n'?'등록상 밤에는 닫혀 있지만, 실제로는 사용할 수 있다는 제보가 있어요':'등록상 낮에는 닫혀 있지만, 실제로는 사용할 수 있다는 제보가 있어요'}
+  else{r.v='okc';r.t='등록 정보와 제보가 대체로 일치해요'}
+  return r}
+function ago(ts){const d=(Date.now()-ts)/864e5;return d<1?'오늘':d<2?'어제':d<30?Math.floor(d)+'일 전':d<365?Math.floor(d/30)+'개월 전':'1년 이상 전'}
+function bar(s){const t=s.u+s.x;if(!t)return'<div class="bo-bar"></div>';return`<div class="bo-bar"><i class="u" style="width:${s.u/t*100}%"></i><i class="x" style="width:${s.x/t*100}%"></i></div>`}
+let bView='list',bKey=null,bFilter='near',bQ='';
+function openBoard(a){$('board').classList.add('open');bView=a?'detail':'list';bKey=a?keyOf(a):null;renderBoard();$('board').querySelector('.bo-body').scrollTop=0}
+function closeBoard(){$('board').classList.remove('open');render(false)}
+function renderBoard(){bView==='detail'?renderDetail():renderList()}
+function renderList(){
+  $('boTtl').textContent='AED 현장 제보 게시판';
+  const total=REP.filter(r=>!r.demo).length;
+  $('boHdr').innerHTML=`<div class="bo-sub">등록된 이용시간과 실제 사용 가능성의 차이를 줄이기 위한 이용자·관리자 제보입니다. 제보 ${REP.length}건${REP.some(r=>r.demo)?' (예시 포함)':''}</div>
+  <input class="bo-search" id="boQ" placeholder="AED 이름·주소·설치장소 검색" value="${esc(bQ)}">
+  <div class="bo-fl" id="boFl">${[['near','가까운 순'],['gap','등록과 다름'],['rep','제보 있음'],['none','제보 없음(검증 필요)']].map(([v,t])=>`<button class="chip ${bFilter===v?'on':''}" data-f="${v}">${t}</button>`).join('')}</div>`;
+  $('boQ').oninput=e=>{bQ=e.target.value;fillList()};
+  $('boFl').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{bFilter=b.dataset.f;renderList()});
+  fillList();
+}
+function fillList(){
+  const q=bQ.trim().toLowerCase();let L=DATA.filter(a=>a.g!=='X').map(a=>{const k=keyOf(a),rp=reps(k),gn=gapOf(a,'n'),gd=gapOf(a,'d');return{a,k,n:rp.length,gap:gn.v==='gap'||gd.v==='gap',gn,gd,m:dist(me.lat,me.lng,a.la,a.lo)}});
+  if(q)L=L.filter(x=>(x.a.n+' '+x.a.p+' '+x.a.a+' '+x.a.t).toLowerCase().includes(q));
+  if(bFilter==='gap')L=L.filter(x=>x.gap);if(bFilter==='rep')L=L.filter(x=>x.n);if(bFilter==='none')L=L.filter(x=>!x.n);
+  L.sort((x,y)=>bFilter==='rep'||bFilter==='gap'?(y.n-x.n)||(x.m-y.m):x.m-y.m);
+  const sh=L.slice(0,60);
+  $('boMain').innerHTML=(sh.length?sh.map((x,i)=>`<div class="bo-it" data-i="${i}"><b>${esc(x.a.n)}</b><div class="s">${esc(x.a.p||'(설치위치 미기재)')} · ${dtxt(x.m)}</div><div class="bo-bds"><span class="bo-b">${esc(x.a.t)}</span>${x.n?`<span class="bo-b okc">제보 ${x.n}건</span>`:'<span class="bo-b few">제보 없음</span>'}${x.gap?'<span class="bo-b gap">등록과 다름</span>':''}</div></div>`).join('')+(L.length>60?`<div class="small" style="text-align:center;padding:8px">상위 60곳만 표시 · 검색으로 좁혀보세요 (전체 ${L.length}곳)</div>`:''):'<div class="bo-card small">조건에 맞는 AED가 없어요.</div>')+dataMgmt();
+  $('boMain').querySelectorAll('.bo-it').forEach(el=>el.onclick=()=>{bKey=sh[+el.dataset.i].k;bView='detail';renderBoard();$('board').querySelector('.bo-body').scrollTop=0});
+  bindMgmt();
+}
+function dataMgmt(){return`<div class="bo-card"><h4>데이터 관리</h4><div class="bo-mg"><button class="chip" id="mgDemo">시연용 예시 제보 넣기</button><button class="chip" id="mgExp">CSV 내보내기</button><button class="chip" id="mgJ">JSON 내보내기</button><button class="chip" id="mgImp">JSON 불러오기</button><button class="chip" id="mgClr">내 제보 모두 삭제</button></div><div class="bo-warn">지금은 프로토타입이라 제보가 <b>이 기기 브라우저에만</b> 저장됩니다. 팀 전체가 모으려면 CSV·JSON을 내보내 합치거나, 공용 저장소(DB)를 붙여야 해요. 예시 제보는 시연용 가짜 데이터라 응급 화면 추천에는 반영되지 않습니다.</div></div>`}
+function dl(name,txt,type){const b=new Blob([txt],{type});const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000)}
+function bindMgmt(){
+  const g=id=>document.getElementById(id);
+  g('mgDemo').onclick=()=>{if(REP.some(r=>r.demo)){toast('예시는 이미 들어 있어요.',2500);return}const pick=g=>DATA.filter(a=>a.g===g).slice(0,2);const now=Date.now(),D=864e5;
+    const mk=(a,res,per,txt,role,ago_)=>({id:'demo'+Math.random().toString(36).slice(2),k:keyOf(a),ts:now-ago_*D,role:role||'user',res,per,vd:3,vt:per==='n'?1400:840,acc:[],txt,demo:1,votes:0});
+    const A=pick('A'),B=pick('B'),C=pick('C');
+    A.forEach(a=>{REP.push(mk(a,'ok','n','경비실에 말하니 바로 꺼내줬어요. (예시)',0,3),mk(a,'ok','n','새벽에도 상주하셨어요. (예시)',0,12))});
+    B.forEach(a=>{REP.push(mk(a,'locked','n','밤 11시에 가보니 문이 잠겨 있었어요. (예시)',0,5),mk(a,'locked','n','야간 출입구가 닫혀 있고 연락처도 없었어요. (예시)',0,20),mk(a,'ok','d','낮에는 안내데스크에서 바로 받았어요. (예시)',0,9))});
+    C.forEach(a=>{REP.push(mk(a,'locked','n','공동현관 비밀번호가 필요해요. (예시)',0,7),mk(a,'locked','n','밤엔 단지 안으로 못 들어갔어요. (예시)',0,15),mk(a,'ok','n','관리사무소 직원분이 꺼내줬어요. (예시)','admin',2))});
+    saveRep();renderList();toast('시연용 예시를 넣었어요. 실제 제보와 구분돼요.',3000)};
+  g('mgExp').onclick=()=>{const rows=[['AED명','설치위치','주소','제보일시','역할','방문요일','방문시각','시간대','결과','접근방법','내용','예시']];REP.forEach(r=>{const a=DATA.find(x=>keyOf(x)===r.k)||{n:'?',p:'',a:''};rows.push([a.n,a.p,a.a,new Date(r.ts).toISOString(),r.role,DAYN[r.vd],fmt(r.vt),r.per==='n'?'야간':'주간',RES[r.res]?RES[r.res].t:r.res,(r.acc||[]).map(x=>ACC[x]).join('/'),r.txt||'',r.demo?'Y':''])});
+    dl('aed_field_reports.csv','﻿'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n'),'text/csv')};
+  g('mgJ').onclick=()=>dl('aed_board.json',JSON.stringify({r:REP,v:VOTE}),'application/json');
+  g('mgImp').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=()=>{const f=i.files[0];if(!f)return;f.text().then(t=>{try{const o=JSON.parse(t),ids=new Set(REP.map(r=>r.id));let n=0;(o.r||[]).forEach(r=>{if(r&&r.id&&r.k&&!ids.has(r.id)){REP.push(r);n++}});saveRep();renderList();toast(n+'건을 합쳤어요.',3000)}catch(e){toast('파일을 읽지 못했어요.',3000)}})};i.click()};
+  g('mgClr').onclick=()=>{if(confirm('이 기기에 저장된 제보를 모두 삭제할까요? 되돌릴 수 없습니다.')){REP=[];VOTE={};saveRep();renderList()}};
+}
+function renderDetail(){
+  const a=DATA.find(x=>keyOf(x)===bKey);if(!a){bView='list';return renderList()}
+  const k=bKey,rp=reps(k).sort((x,y)=>y.ts-x.ts);
+  $('boTtl').textContent='제보 상세';
+  $('boHdr').innerHTML=`<div class="bo-row" style="margin-top:8px"><button class="chip" id="boL" style="min-height:34px;font-size:13px">‹ 목록</button></div>`;
+  const regRows=hoursText(a).map(x=>`<div><span>${x.d}</span><span>${x.s}</span></div>`).join('');
+  const adm=rp.filter(r=>r.role==='admin'&&r.fix&&!r.demo)[0];
+  const sec=per=>{const g=gapOf(a,per),s=g.s,t=per==='n'?'밤(21시~06시)':'낮(06시~21시)';
+    return`<div class="bo-ln"><b>${t}</b> · 제보 ${s.n}건${s.n?` (사용 가능 ${s.u} · 불가 ${s.x})`:''}</div>${bar(s)}<div class="bo-v ${g.v}">${g.v==='few'?'제보가 2건 이상 모이면 등록 정보와 비교해 드려요':g.t}</div>`};
+  $('boMain').innerHTML=`<div class="bo-card"><div class="bo-h">${esc(a.n)}</div><div class="small">${esc(a.p||'(설치위치 미기재)')}<br>${esc(a.a)}</div><div class="bo-bds"><span class="bo-b">${esc(a.t)}</span><span class="bo-b">${GNAME[a.g]}</span>${a.k&&TAG[a.k]?`<span class="bo-b few">${TAG[a.k].lab}</span>`:''}${flab(a.f)?`<span class="bo-b">${flab(a.f)}</span>`:''}</div></div>
+  <button class="bo-fab" id="boNew">이 AED 제보·의견 남기기</button>
+  <div class="bo-card"><h4>공공데이터 등록 이용시간</h4><div class="bo-reg">${regRows}</div>${adm?`<div class="bo-v okc" style="margin-top:10px">관리자 정정 정보: ${esc(adm.fix)} <span class="small">(${ago(adm.ts)} · 미인증)</span></div>`:''}</div>
+  <div class="bo-card"><h4>실제 사용 가능성 (최근 제보)</h4>${sec('n')}${sec('d')}<div class="bo-warn">한두 건의 제보는 우연일 수 있어서, 같은 시간대 제보가 2건 이상 모이면 비교합니다. 최근 6개월 제보만 응급 화면 추천에 반영돼요.</div></div>
+  <div class="bo-card"><h4>제보·의견 ${rp.length}건</h4>${rp.length?rp.map(r=>{const m=RES[r.res]||{t:r.res,c:'n'};return`<div class="bo-rp"><div class="bo-rh"><span class="bo-role ${r.demo?'demo':r.role==='admin'?'ad':''}">${r.demo?'예시':r.role==='admin'?'관리자(미인증)':'이용자'}</span><span>${ago(r.ts)} · ${DAYN[r.vd]} ${fmt(r.vt)} 방문 · ${r.per==='n'?'야간':'주간'}</span></div><div class="bo-res ${m.c}">${m.t}</div>${(r.acc||[]).length?`<div class="bo-bds">${r.acc.map(x=>`<span class="bo-b">${ACC[x]||x}</span>`).join('')}</div>`:''}${r.txt?`<div class="bo-tx">${esc(r.txt)}</div>`:''}${r.fix?`<div class="bo-tx"><b>정정 운영시간</b> ${esc(r.fix)}</div>`:''}<div style="margin-top:6px"><button class="bo-hp ${VOTE[r.id]?'on':''}" data-id="${r.id}">도움이 됐어요 ${(r.votes||0)+(VOTE[r.id]?1:0)||''}</button>${r.demo||!r.mine?'':` <button class="bo-hp" data-del="${r.id}">삭제</button>`}</div></div>`}).join(''):'<div class="small">아직 제보가 없어요. 가본 적이 있다면 첫 제보를 남겨주세요.</div>'}</div>`;
+  $('boL').onclick=()=>{bView='list';renderBoard()};
+  $('boNew').onclick=()=>openForm(a);
+  $('boMain').querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{VOTE[b.dataset.id]=!VOTE[b.dataset.id];saveRep();renderDetail()});
+  $('boMain').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(confirm('이 제보를 삭제할까요?')){REP=REP.filter(r=>r.id!==b.dataset.del);saveRep();renderDetail()}});
+}
+function openForm(a){
+  const n=nowKST();const f={role:'user',res:null,acc:new Set(),vd:n.d,vt:n.t};
+  const body=$('boFormBody');
+  const draw=()=>{const sc=body.scrollTop;body.innerHTML=`<h2>${esc(a.n)}</h2><div class="small">${esc(a.p||'')} · 직접 가본 경험을 알려주세요.</div>
+  <h4>누구로 남기나요</h4><div class="bo-mg">${[['user','이용자'],['admin','관리자·담당자']].map(([v,t])=>`<button class="chip ${f.role===v?'on':''}" data-r="${v}">${t}</button>`).join('')}</div>
+  <h4>방문한 때</h4><div class="row"><select class="bo-in" id="fvd" style="width:auto">${DAYN.slice(0,7).map((d,i)=>`<option value="${i}" ${f.vd===i?'selected':''}>${d}요일</option>`).join('')}</select><input type="time" id="fvt" value="${fmt(f.vt)}"></div>
+  <h4>결과 (하나 선택)</h4><div class="bo-mg">${Object.entries(RES).map(([v,m])=>`<button class="chip ${f.res===v?'on':''}" data-s="${v}">${m.t}</button>`).join('')}</div>
+  <h4>접근 방법 (해당되는 것 모두)</h4><div class="bo-mg">${Object.entries(ACC).map(([v,t])=>`<button class="chip ${f.acc.has(v)?'on':''}" data-a="${v}">${t}</button>`).join('')}</div>
+  <h4>한 줄 의견 (선택)</h4><textarea class="bo-in" id="ftx" maxlength="200" placeholder="예: 정문 경비실에서 요청해야 해요. 3층 복도 끝에 있어요."></textarea>
+  ${f.role==='admin'?`<h4>정정할 운영시간 (선택, 관리자)</h4><input class="bo-in" id="ffx" maxlength="80" placeholder="예: 평일 09:00–18:00, 야간은 경비실 요청">`:''}
+  <div class="bo-warn">개인정보·얼굴 사진·연락처는 적지 마세요. 관리자 표시는 아직 본인 확인을 하지 않는 시연용이에요.</div>
+  <button class="close" id="fok">제보 올리기</button><button class="close" id="fno" style="background:#eef1f5;color:var(--ink);margin-top:8px">취소</button>`;
+  body.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{keep();f.role=b.dataset.r;draw()});
+  body.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{keep();f.res=b.dataset.s;draw()});
+  body.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{keep();const v=b.dataset.a;f.acc.has(v)?f.acc.delete(v):f.acc.add(v);draw()});
+  body.scrollTop=sc;
+  $('fno').onclick=()=>$('boForm').classList.remove('open');
+  $('fok').onclick=()=>{keep();if(!f.res){toast('결과를 하나 골라주세요.',2500);return}
+    const per=isNight(f.vt)?'n':'d';const r={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),k:keyOf(a),ts:Date.now(),role:f.role,res:f.res,per,vd:f.vd,vt:f.vt,acc:[...f.acc],txt:f.txt||'',mine:1,votes:0};
+    if(f.role==='admin'&&f.fix)r.fix=f.fix;REP.push(r);saveRep();$('boForm').classList.remove('open');renderDetail();toast('제보가 저장됐어요. 감사합니다.',2500)};
+  };
+  const keep=()=>{const v=$('fvd');if(v)f.vd=+v.value;const t=$('fvt');if(t&&t.value)f.vt=+t.value.slice(0,2)*60+ +t.value.slice(3);const x=$('ftx');if(x)f.txt=x.value;const y=$('ffx');if(y)f.fix=y.value};
+  draw();$('boForm').classList.add('open');
+}
+$('boBack').onclick=closeBoard;
+$('fBoard').onclick=()=>openBoard(null);
+$('boForm').addEventListener('click',e=>{if(e.target.id==='boForm')$('boForm').classList.remove('open')});
+
 render();loadSDK();gps(true);
 </script>
 </body>
