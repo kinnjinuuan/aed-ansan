@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#eef3f8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>가장 빠른 AED · 안산</title>
+<title>곁에 · 지금 쓸 수 있는 AED</title>
 <style>
 :root{--ok:#1b9e6b;--warn:#e8890c;--red:#e5372b;--ink:#111418;--mute:#6b7685;--line:#e6eaf0;--cream:#f6e6b8;--glass:rgba(255,255,255,.76);--sh:clamp(300px,46dvh,420px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -19,7 +19,8 @@ body{font-family:"Pretendard","Noto Sans KR","Malgun Gothic",system-ui,sans-seri
 .nomap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--mute);line-height:1.7;font-size:14px}
 /* header over map */
 .hd{position:absolute;left:0;right:0;top:0;z-index:4;padding:calc(env(safe-area-inset-top) + 16px) 20px 46px;background:linear-gradient(#fff 0%,rgba(255,255,255,.9) 45%,rgba(255,255,255,0) 100%);pointer-events:none}
-.ttl{font-size:30px;font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.ttl .sub2{display:block;font-size:15px;font-weight:600;color:var(--mute);letter-spacing:0;margin-top:5px}
+.ttl{font-size:34px;font-weight:800;line-height:1.1;letter-spacing:-.02em}
 .stats{display:flex;gap:26px;margin-top:14px}
 .stats div{display:flex;align-items:flex-end;gap:6px}
 .stats b{font-size:38px;font-weight:600;line-height:.9;letter-spacing:-.03em}
@@ -161,7 +162,7 @@ textarea.bo-in{min-height:84px;resize:vertical}
 <div class="app">
   <div id="mapwrap"><div id="map"></div></div>
   <header class="hd">
-    <div class="ttl">지금 쓸 수 있는<br>AED 찾기</div>
+    <div class="ttl">곁에<span class="sub2">지금 쓸 수 있는 AED 찾기</span></div>
     <div class="stats"><div><b id="nAvail">–</b><span>대<br>이용 가능</span></div><div><b id="nFast">–</b><span>분<br>추천 AED 도보</span></div></div>
     <div class="ctx" id="ctx">위치 확인 중…</div>
   </header>
